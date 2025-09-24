@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Form, Input, Button, Row, Col, message } from "antd";
+import { Form, Input, Button, Row, Col, message, Spin, Alert } from "antd";
 import {
   MailOutlined,
   PhoneOutlined,
@@ -9,12 +9,22 @@ import {
   SendOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
+import { useContactInfo, useOfficeHours } from "@/hooks/useApiData";
 
 const { TextArea } = Input;
+
+// 图标映射
+const iconMap = {
+  '邮箱': <MailOutlined className="text-xl" />,
+  '电话': <PhoneOutlined className="text-xl" />,
+  '地址': <EnvironmentOutlined className="text-xl" />,
+};
 
 export default function Contact() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const { contactInfo, loading: contactLoading, error: contactError } = useContactInfo();
+  const { officeHours, loading: officeHoursLoading, error: officeHoursError } = useOfficeHours();
 
   const onFinish = async () => {
     setLoading(true);
@@ -30,30 +40,6 @@ export default function Contact() {
       setLoading(false);
     }
   };
-
-  const contactInfo = [
-    {
-      icon: <MailOutlined className="text-xl" />,
-      title: "邮箱",
-      content: ["contact@company.com", "support@company.com"],
-      bg: "bg-blue-100",
-      color: "text-blue-600",
-    },
-    {
-      icon: <PhoneOutlined className="text-xl" />,
-      title: "电话",
-      content: ["+86 400-123-4567", "+86 138-0013-8000"],
-      bg: "bg-green-100",
-      color: "text-green-600",
-    },
-    {
-      icon: <EnvironmentOutlined className="text-xl" />,
-      title: "地址",
-      content: ["北京市朝阳区望京SOHO Tower A", "上海市浦东新区陆家嘴金融中心"],
-      bg: "bg-purple-100",
-      color: "text-purple-600",
-    },
-  ];
 
   return (
     <section
@@ -75,50 +61,76 @@ export default function Contact() {
 
         <Row gutter={[64, 32]}>
           <Col xs={24} lg={12}>
-            <div className="space-y-8">
-              {contactInfo.map((info, index) => (
-                <div
-                  key={index}
-                  className="flex items-start group hover:shadow-lg transition-all duration-300 p-6 rounded-2xl bg-white border border-gray-200/50"
-                >
-                  <div
-                    className={`${info.bg} p-3 rounded-xl mr-4 group-hover:scale-110 transition-transform duration-300`}
-                  >
-                    <div className={info.color}>{info.icon}</div>
+            {contactLoading || officeHoursLoading ? (
+              <div className="space-y-8">
+                {[1, 2, 3].map((_, index) => (
+                  <div key={index} className="flex items-start p-6 rounded-2xl bg-white border border-gray-200/50">
+                    <Spin size="small" />
+                    <div className="ml-4 text-gray-600">加载中...</div>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                      {info.title}
-                    </h3>
-                    <div className="space-y-1">
-                      {info.content.map((item, idx) => (
-                        <p
-                          key={idx}
-                          className="text-gray-600 group-hover:text-gray-800 transition-colors duration-300"
-                        >
-                          {item}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              {/* Office Hours */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-2xl text-white">
-                <div className="flex items-center mb-4">
-                  <div className="bg-white/20 p-2 rounded-lg mr-3">
-                    <ClockCircleOutlined className="text-xl" />
-                  </div>
-                  <h3 className="text-lg font-semibold">办公时间</h3>
-                </div>
-                <div className="space-y-2 text-blue-100">
-                  <p>周一至周五: 9:00 - 18:00</p>
-                  <p>周六: 10:00 - 16:00</p>
-                  <p>周日: 休息</p>
+                ))}
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-2xl text-white">
+                  <Spin size="small" />
+                  <div className="mt-2 text-blue-100">加载办公时间中...</div>
                 </div>
               </div>
-            </div>
+            ) : contactError || officeHoursError ? (
+              <div className="space-y-8">
+                <Alert
+                  message="联系信息加载失败"
+                  description={contactError || officeHoursError}
+                  type="warning"
+                  showIcon
+                />
+              </div>
+            ) : (
+              <div className="space-y-8">
+                {contactInfo.map((info, index) => (
+                  <div
+                    key={index}
+                    className="flex items-start group hover:shadow-lg transition-all duration-300 p-6 rounded-2xl bg-white border border-gray-200/50"
+                  >
+                    <div
+                      className={`${info.bg} p-3 rounded-xl mr-4 group-hover:scale-110 transition-transform duration-300`}
+                    >
+                      <div className={info.color}>
+                        {iconMap[info.title as keyof typeof iconMap] || <MailOutlined className="text-xl" />}
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                        {info.title}
+                      </h3>
+                      <div className="space-y-1">
+                        {info.content.map((item, idx) => (
+                          <p
+                            key={idx}
+                            className="text-gray-600 group-hover:text-gray-800 transition-colors duration-300"
+                          >
+                            {item}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Office Hours */}
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-2xl text-white">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-white/20 p-2 rounded-lg mr-3">
+                      <ClockCircleOutlined className="text-xl" />
+                    </div>
+                    <h3 className="text-lg font-semibold">办公时间</h3>
+                  </div>
+                  <div className="space-y-2 text-blue-100">
+                    {officeHours.map((hour, index) => (
+                      <p key={index}>{hour}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </Col>
 
           <Col xs={24} lg={12}>

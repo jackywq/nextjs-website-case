@@ -7,6 +7,8 @@ export interface WebsiteData {
   services: ServiceData[]
   skills: SkillData[]
   stats: StatData[]
+  contactInfo: ContactInfo[]
+  officeHours: string[]
 }
 
 export function useApiData() {
@@ -95,6 +97,31 @@ export function useApiData() {
             { number: '50+', label: '团队成员', bg: 'bg-green-100', color: 'text-green-600', icon: '👥' },
             { number: '500+', label: '完成项目', bg: 'bg-purple-100', color: 'text-purple-600', icon: '✅' },
             { number: '100+', label: '满意客户', bg: 'bg-orange-100', color: 'text-orange-600', icon: '😊' }
+          ],
+          contactInfo: [
+            {
+              title: '邮箱',
+              content: ['contact@company.com', 'support@company.com'],
+              bg: 'bg-blue-100',
+              color: 'text-blue-600'
+            },
+            {
+              title: '电话',
+              content: ['+86 400-123-4567', '+86 138-0013-8000'],
+              bg: 'bg-green-100',
+              color: 'text-green-600'
+            },
+            {
+              title: '地址',
+              content: ['北京市朝阳区望京SOHO Tower A', '上海市浦东新区陆家嘴金融中心'],
+              bg: 'bg-purple-100',
+              color: 'text-purple-600'
+            }
+          ],
+          officeHours: [
+            '周一至周五: 9:00 - 18:00',
+            '周六: 10:00 - 16:00',
+            '周日: 休息'
           ]
         })
       } finally {
@@ -130,6 +157,24 @@ export function useStats() {
   const { data, loading, error } = useApiData()
   return { 
     stats: data?.stats || [], 
+    loading, 
+    error 
+  }
+}
+
+export function useContactInfo() {
+  const { data, loading, error } = useApiData()
+  return { 
+    contactInfo: data?.contactInfo || [], 
+    loading, 
+    error 
+  }
+}
+
+export function useOfficeHours() {
+  const { data, loading, error } = useApiData()
+  return { 
+    officeHours: data?.officeHours || [], 
     loading, 
     error 
   }

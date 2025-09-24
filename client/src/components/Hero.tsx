@@ -1,9 +1,11 @@
 'use client'
 
-import { Button, Space } from 'antd'
+import { Button, Space, Spin } from 'antd'
 import { PlayCircleOutlined, ArrowRightOutlined } from '@ant-design/icons'
+import { useStats } from '@/hooks/useApiData'
 
 export default function Hero() {
+  const { stats, loading, error } = useStats()
   return (
     <section className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white py-20 md:py-28" id="home">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,23 +48,44 @@ export default function Hero() {
           </Space>
 
           {/* Stats with improved design */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-            {[
-              { number: '500+', label: '成功项目', color: 'from-yellow-400 to-orange-400' },
-              { number: '100+', label: '合作客户', color: 'from-green-400 to-teal-400' },
-              { number: '50+', label: '技术专家', color: 'from-purple-400 to-pink-400' },
-              { number: '5+', label: '行业经验', color: 'from-blue-400 to-cyan-400' }
-            ].map((stat, index) => (
-              <div key={index} className="text-center group">
-                <div className={`text-3xl md:text-4xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300`}>
-                  {stat.number}
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+              {[1, 2, 3, 4].map((_, index) => (
+                <div key={index} className="text-center">
+                  <Spin size="small" />
+                  <div className="text-sm opacity-80 mt-2">加载中...</div>
                 </div>
-                <div className="text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : error ? (
+            <div className="text-center text-yellow-300 text-sm opacity-80">
+              统计数据加载失败
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+              {stats.slice(0, 4).map((stat, index) => {
+                // 为不同的统计项分配不同的颜色
+                const colorMap = [
+                  'from-yellow-400 to-orange-400',
+                  'from-green-400 to-teal-400', 
+                  'from-purple-400 to-pink-400',
+                  'from-blue-400 to-cyan-400'
+                ]
+                const color = colorMap[index] || 'from-gray-400 to-gray-600'
+                
+                return (
+                  <div key={index} className="text-center group">
+                    <div className={`text-3xl md:text-4xl font-bold bg-gradient-to-r ${color} bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300`}>
+                      {stat.number}
+                    </div>
+                    <div className="text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                      {stat.label}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       </div>
 

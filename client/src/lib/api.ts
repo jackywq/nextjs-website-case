@@ -63,6 +63,21 @@ export interface StatData {
   color: string;
 }
 
+export interface ContactInfo {
+  title: string;
+  content: string[];
+  bg: string;
+  color: string;
+}
+
+export interface WebsiteData {
+  services: ServiceData[];
+  skills: SkillData[];
+  stats: StatData[];
+  contactInfo: ContactInfo[];
+  officeHours: string[];
+}
+
 // 统一的API请求函数
 async function apiRequest<T>(endpoint: string): Promise<ApiResponse<T>> {
   try {
