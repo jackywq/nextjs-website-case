@@ -1,0 +1,39 @@
+{
+  "name": "nextjs-project",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "dev:vite": "vite",
+    "build:vite": "vite build",
+    "preview:vite": "vite preview",
+    "dev:monitor": "node scripts/dev-monitor.js",
+    "dev:analyze": "NEXT_TELEMETRY_DISABLED=1 NEXT_ANALYZE=true npm run dev"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^6.0.2",
+    "@reduxjs/toolkit": "^2.9.0",
+    "antd": "^5.27.4",
+    "next": "15.5.3",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-redux": "^9.2.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^5.0.3",
+    "chalk": "^5.6.2",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.3",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vite": "^7.1.7"
+  }
+}

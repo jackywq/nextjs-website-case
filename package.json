@@ -1,0 +1,43 @@
+{
+  "name": "nextjs-website-case",
+  "version": "1.0.0",
+  "description": "Next.js website case with Express API server",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm start",
+    "build": "cd client && npm run build",
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
+    "start:client": "cd client && npm start",
+    "start:server": "cd server && npm start",
+    "install:all": "cd client && npm install && cd ../server && npm install",
+    "test": "cd client && npm test",
+    "test:server": "cd server && node test-api.js",
+    "lint": "cd client && npm run lint",
+    "clean": "rm -rf client/.next client/out server/node_modules client/node_modules node_modules",
+    "setup": "npm run install:all"
+  },
+  "keywords": [
+    "nextjs",
+    "express",
+    "react",
+    "typescript"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/nextjs-website-case"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/nextjs-website-case/issues"
+  },
+  "homepage": "https://github.com/your-username/nextjs-website-case#readme"
+}
