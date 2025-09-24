@@ -14,7 +14,8 @@ yarn-error.log*
 # ========================
 # Build outputs
 # ========================
-/.next/
+/.next
+/client/.next/
 /out/
 /build
 /dist/

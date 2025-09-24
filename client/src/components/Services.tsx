@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, Row, Col } from 'antd'
+import { Card, Row, Col, Spin, Alert } from 'antd'
 import { 
   CodeOutlined, 
   MobileOutlined, 
@@ -9,59 +9,49 @@ import {
   ApiOutlined,
   SecurityScanOutlined
 } from '@ant-design/icons'
+import { useServices } from '@/hooks/useApiData'
 
-const services = [
-  {
-    title: 'Web开发',
-    description: '专业的响应式网站开发，提供最佳的用户体验和性能优化',
-    icon: <CodeOutlined className="text-4xl" />,
-    features: ['React/Next.js', 'TypeScript', '响应式设计'],
-    gradient: 'from-blue-500 to-blue-600',
-    color: 'blue'
-  },
-  {
-    title: '移动应用',
-    description: '跨平台移动应用开发，支持iOS和Android平台',
-    icon: <MobileOutlined className="text-4xl" />,
-    features: ['React Native', 'Flutter', '原生开发'],
-    gradient: 'from-green-500 to-green-600',
-    color: 'green'
-  },
-  {
-    title: '云服务',
-    description: '云端部署和运维服务，确保应用的高可用性和扩展性',
-    icon: <CloudOutlined className="text-4xl" />,
-    features: ['AWS/Aliyun', 'Docker', 'Kubernetes'],
-    gradient: 'from-purple-500 to-purple-600',
-    color: 'purple'
-  },
-  {
-    title: '数据库设计',
-    description: '专业的数据库架构设计和优化，保障数据安全与性能',
-    icon: <DatabaseOutlined className="text-4xl" />,
-    features: ['MySQL', 'MongoDB', 'Redis'],
-    gradient: 'from-orange-500 to-orange-600',
-    color: 'orange'
-  },
-  {
-    title: 'API开发',
-    description: 'RESTful API和GraphQL接口开发，支持微服务架构',
-    icon: <ApiOutlined className="text-4xl" />,
-    features: ['Node.js', 'Python', 'Go'],
-    gradient: 'from-red-500 to-red-600',
-    color: 'red'
-  },
-  {
-    title: '安全审计',
-    description: '全面的安全检测和漏洞修复，保护您的业务安全',
-    icon: <SecurityScanOutlined className="text-4xl" />,
-    features: ['渗透测试', '代码审计', '安全加固'],
-    gradient: 'from-indigo-500 to-indigo-600',
-    color: 'indigo'
-  }
-]
+// 图标映射
+const iconMap = {
+  'Web开发': <CodeOutlined className="text-4xl" />,
+  '移动应用': <MobileOutlined className="text-4xl" />,
+  '云服务': <CloudOutlined className="text-4xl" />,
+  '数据库设计': <DatabaseOutlined className="text-4xl" />,
+  'API开发': <ApiOutlined className="text-4xl" />,
+  '安全审计': <SecurityScanOutlined className="text-4xl" />
+}
 
 export default function Services() {
+  const { services, loading, error } = useServices()
+
+  if (loading) {
+    return (
+      <section id="services" className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <Spin size="large" />
+            <p className="mt-4 text-gray-600">加载服务数据中...</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section id="services" className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Alert
+            message="数据加载失败"
+            description={error}
+            type="warning"
+            showIcon
+          />
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section id="services" className="py-20 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,7 +81,7 @@ export default function Services() {
               >
                 <div className="mb-6">
                   <div className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${service.gradient} rounded-2xl text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                    {service.icon}
+                    {iconMap[service.title as keyof typeof iconMap] || <CodeOutlined className="text-4xl" />}
                   </div>
                   
                   <h3 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">

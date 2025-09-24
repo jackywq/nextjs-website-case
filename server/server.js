@@ -149,6 +149,72 @@ app.get('/api/info', (req, res) => {
   });
 });
 
+// 获取网站数据（专门为前端页面设计）
+app.get('/api/website-data', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      services: [
+        {
+          title: 'Web开发',
+          description: '专业的响应式网站开发，提供最佳的用户体验和性能优化',
+          features: ['React/Next.js', 'TypeScript', '响应式设计'],
+          gradient: 'from-blue-500 to-blue-600',
+          color: 'blue'
+        },
+        {
+          title: '移动应用',
+          description: '跨平台移动应用开发，支持iOS和Android平台',
+          features: ['React Native', 'Flutter', '原生开发'],
+          gradient: 'from-green-500 to-green-600',
+          color: 'green'
+        },
+        {
+          title: '云服务',
+          description: '云端部署和运维服务，确保应用的高可用性和扩展性',
+          features: ['AWS/Aliyun', 'Docker', 'Kubernetes'],
+          gradient: 'from-purple-500 to-purple-600',
+          color: 'purple'
+        },
+        {
+          title: '数据库设计',
+          description: '专业的数据库架构设计和优化，保障数据安全与性能',
+          features: ['MySQL', 'MongoDB', 'Redis'],
+          gradient: 'from-orange-500 to-orange-600',
+          color: 'orange'
+        },
+        {
+          title: 'API开发',
+          description: 'RESTful API和GraphQL接口开发，支持微服务架构',
+          features: ['Node.js', 'Python', 'Go'],
+          gradient: 'from-red-500 to-red-600',
+          color: 'red'
+        },
+        {
+          title: '安全审计',
+          description: '全面的安全检测和漏洞修复，保护您的业务安全',
+          features: ['渗透测试', '代码审计', '安全加固'],
+          gradient: 'from-indigo-500 to-indigo-600',
+          color: 'indigo'
+        }
+      ],
+      skills: [
+        { name: '前端开发', percent: 95, color: '#1890ff', icon: '🚀' },
+        { name: '后端开发', percent: 90, color: '#52c41a', icon: '⚡' },
+        { name: '移动开发', percent: 85, color: '#faad14', icon: '📱' },
+        { name: '云服务', percent: 88, color: '#722ed1', icon: '☁️' }
+      ],
+      stats: [
+        { number: '2018', label: '成立年份', bg: 'bg-blue-100', color: 'text-blue-600' },
+        { number: '50+', label: '团队成员', bg: 'bg-green-100', color: 'text-green-600' },
+        { number: '500+', label: '完成项目', bg: 'bg-purple-100', color: 'text-purple-600' },
+        { number: '100+', label: '满意客户', bg: 'bg-orange-100', color: 'text-orange-600' }
+      ]
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 // 错误处理中间件
 app.use((err, req, res, next) => {
   console.error(err.stack);

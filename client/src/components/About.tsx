@@ -1,46 +1,51 @@
 'use client'
 
-import { Row, Col, Progress, Button } from 'antd'
+import { Row, Col, Progress, Button, Spin, Alert } from 'antd'
 import { ArrowRightOutlined, TrophyOutlined, TeamOutlined, ProjectOutlined, StarOutlined } from '@ant-design/icons'
+import { useSkills, useStats } from '@/hooks/useApiData'
+
+// 图标映射
+const iconMap = {
+  '成立年份': <TrophyOutlined className="text-2xl" />,
+  '团队成员': <TeamOutlined className="text-2xl" />,
+  '完成项目': <ProjectOutlined className="text-2xl" />,
+  '满意客户': <StarOutlined className="text-2xl" />
+}
 
 export default function About() {
-  const skills = [
-    { name: '前端开发', percent: 95, color: '#1890ff', icon: '🚀' },
-    { name: '后端开发', percent: 90, color: '#52c41a', icon: '⚡' },
-    { name: '移动开发', percent: 85, color: '#faad14', icon: '📱' },
-    { name: '云服务', percent: 88, color: '#722ed1', icon: '☁️' },
-  ]
+  const { skills, loading: skillsLoading, error: skillsError } = useSkills()
+  const { stats, loading: statsLoading, error: statsError } = useStats()
 
-  const stats = [
-    { 
-      number: '2018', 
-      label: '成立年份', 
-      icon: <TrophyOutlined className="text-2xl" />,
-      bg: 'bg-blue-100',
-      color: 'text-blue-600'
-    },
-    { 
-      number: '50+', 
-      label: '团队成员', 
-      icon: <TeamOutlined className="text-2xl" />,
-      bg: 'bg-green-100',
-      color: 'text-green-600'
-    },
-    { 
-      number: '500+', 
-      label: '完成项目', 
-      icon: <ProjectOutlined className="text-2xl" />,
-      bg: 'bg-purple-100',
-      color: 'text-purple-600'
-    },
-    { 
-      number: '100+', 
-      label: '满意客户', 
-      icon: <StarOutlined className="text-2xl" />,
-      bg: 'bg-orange-100',
-      color: 'text-orange-600'
-    }
-  ]
+  const loading = skillsLoading || statsLoading
+  const error = skillsError || statsError
+
+  if (loading) {
+    return (
+      <section id="about" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <Spin size="large" />
+            <p className="mt-4 text-gray-600">加载关于我们数据中...</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section id="about" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Alert
+            message="数据加载失败"
+            description={error}
+            type="warning"
+            showIcon
+          />
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section id="about" className="py-20 bg-white">
@@ -113,7 +118,7 @@ export default function About() {
                   >
                     <div className="flex items-center justify-between mb-4">
                       <div className={`${stat.color} p-2 rounded-lg`}>
-                        {stat.icon}
+                        {iconMap[stat.label as keyof typeof iconMap] || <TrophyOutlined className="text-2xl" />}
                       </div>
                     </div>
                     
